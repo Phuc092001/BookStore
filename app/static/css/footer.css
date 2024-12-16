@@ -1,0 +1,127 @@
+footer{
+    background-color:#010101;
+    color:#999;
+    position:relative;
+    bottom:0;
+   width:100%;
+   height:auto;
+   padding:50px 100px;
+ }
+
+
+ footer ul{
+    list-style-type:none;
+ }
+
+ footer ul li{
+    padding:5px 0 ;
+ }
+
+ footer ul a{
+    text-decoration:none;
+    color:#999;
+ }
+
+footer .container{
+    justify-content: space-between;
+    flex-wrap:wrap;
+}
+
+footer i{
+    padding:0 15px 0 0;
+}
+
+size{
+    font-size:17px;
+}
+
+
+
+container > div{
+    width:var(--width);
+    padding:5px;
+}
+
+container .aboutus{
+    width:45%;
+}
+
+container h2 {
+    padding:10px 0;
+    position:relative;
+    color:#fff;
+}
+
+container h2::after{
+    content:"";
+    height:2px;
+    width:50px;
+    background-color:#FF0000;
+    position:absolute;
+    display:block;
+}
+
+aboutus ul{
+    margin-top:20px;
+}
+
+aboutus .icons li{
+    margin-right:10px;
+    border-radius:4px;
+    background-color:#222;
+    width:40px;
+    height:40px;
+    padding-top:0;
+}
+
+aboutus .icons .fa{
+    font-size:20px;
+    color:#fff;
+}
+
+icons li  i{
+     display: flex;
+     width:55px;
+    height:40px;
+    justify-content: center;
+    align-items:center;
+}
+
+icons li:hover {
+    background-color:#FF0000;
+}
+
+formemail input.email{
+    height:40px;
+    width:240px;
+    font-size:18px;
+    padding:3px;
+}
+
+formemail button{
+    font-size:20px;
+    padding:5px 20px;
+    margin-top:10px;
+    background-color:#222;
+    color:white;
+    border-radius:4px;
+    border:#FF0000;
+}
+
+formemail button:hover{
+    background-color:#FF0000;
+    border:#FF0000;
+}
+
+section {
+    margin-top:100px;
+}
+
+link >li > a:hover{
+    color:#fff;
+}
+
+contact i{
+    font-size:20px;
+    color:#fff;
+}

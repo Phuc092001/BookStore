@@ -1,0 +1,170 @@
+{% extends 'layout/base.html' %}
+
+{% block content %}
+
+{% if current_user.is_authenticated and current_user.user_role.value ==3 %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cashier Page</title>
+    <link href="{{ url_for('static', filename='css/cashier.css') }}" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .col {
+            flex: 1;
+            min-width: 250px;
+        }
+        .col h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .product-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+        }
+        .product-container input {
+            width: 100px;
+            text-align: center;
+        }
+        .total-container {
+            border-top: 1px solid #e6e6e6;
+            padding-top: 20px;
+            padding: 20px;
+            background-color: #f8f8f8;
+            border-radius: 5px;
+        }
+        .total-container h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Our Cashier Page</h1>
+        <div class="row">
+            <div class="col">
+                {% if 'cartCashier' in session %}
+               <table class="table product-container">
+                    <tr>
+                        <th>Mã sản phẩm</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th></th>
+                    </tr>
+                    {% for c in session['cartCashier'].values() %}
+                    <tr id="product{{ c.id }}">
+                        <td>{{ c.id }}</td>
+                        <td>{{ c.name }}</td>
+                        <td>{{ "{:,.0f}".format(c.price) }} VNĐ</td>
+                        <td>
+                            <input type="number" onblur="updateCartForEmp({{ c.id }}, this)" value="{{ c.quantity }}" class="form-control" />
+                        </td>
+                        <td>
+                            <button class="btn btn-danger" onclick="deleteCartForEmp({{ c.id }}, this)">&times;</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div class="col">
+                <h2>Total</h2>
+                <div class="total-container">
+                    <h3>Tổng tiền: <span class="cart-amount">{{ "{:,.0f}".format(cashier_stats.total_amount) }}</span> VNĐ</h3>
+                    <h3>Tổng số lượng: <span class="cart-counter">{{cashier_stats.total_quantity}}</span></h3>
+                    <div>
+                        {% if current_user.is_authenticated and current_user.user_role.value ==3 %}
+                        <input type="button" onclick="payForEmp()" value="Thanh toán" class="btn btn-success"/>
+                        {% else %}
+                        <p>Vui lòng <a href="/login?next=/cart">đăng nhập</a> để thanh toán!</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        {% elif 'print_cart' in session %}
+        <div class="r-content">
+            <div class="r-sub-content mb-0">
+
+                <div class="row r-title" style="font-weight: bold">
+                    <p>HÓA ĐƠN</p>
+                </div>
+                <hr>
+               <table class="table">
+                    <tr>
+                        <th>Mã sản phẩm</th>
+                        <th>Tên sản phẩm</th>
+                        <th>Đơn giá</th>
+                        <th>Số lượng</th>
+                        <th></th>
+                    </tr>
+                    {% for c in session['print_cart'].values() %}
+                    <tr id="product{{ c.id }}">
+                        <td>{{ c.id }}</td>
+                        <td>{{ c.name }}</td>
+                        <td>{{ "{:,.0f}".format(c.price) }} VNĐ</td>
+                        <td>
+                           {{ c.quantity }}
+                        </td>
+
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+
+                <div class="total-container">
+                    <h3>Tổng tiền: <span class="cart-amount">{{ "{:,.0f}".format(print_cart_stats.total_amount) }}</span> VNĐ</h3>
+                    <h3>Tổng số lượng: <span class="cart-counter">{{print_cart_stats.total_quantity}}</span></h3>
+                    <h3>Nhân viên: <span class="cart-counter">{{u.name}}</span></h3>
+                </div>
+
+        </div>
+        <input type="button" onclick="printBill()" value="Print" class="btn btn-success"/>
+         {% else %}
+            <div class="alert alert-info">KHÔNG CÓ HÓA ĐƠN CẦN THANH TOÁN</div>
+
+        {% endif %}
+    </div>
+{% endif %}
+
+{% endblock %}
